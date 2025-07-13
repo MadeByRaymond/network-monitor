@@ -44,7 +44,7 @@ export class NetworkMonitor {
   private init() {
     window.addEventListener("online", () => this.refresh());
     window.addEventListener("offline", () => this.refresh());
-
+    
     this.initConnectionChangeListener();
 
     const connection = this.getConnection();
