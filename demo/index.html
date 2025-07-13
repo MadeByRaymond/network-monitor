@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Network Monitor</title>
+</head>
+<body>
+  <h2>Network Monitor</h2>
+  <div id="aaa">Loading...</div>
+
+  <script src="https://unpkg.com/network-monitor-js"></script>
+
+  <script>
+    const monitor = new NetworkMonitor('test.html'); // should be defined now
+
+    monitor.subscribe(status => {
+      document.getElementById('aaa').innerHTML = `
+        <p>✅ Online: ${status.online}</p>
+        <p>⏱️ Latency: ${status.latency}ms</p>
+        <p>📶 Type: ${status.effectiveType || 'unknown'}</p>
+        <p>⚠️ Poor Connection: ${status.poorConnection}</p>
+      `;
+    });
+  </script>
+</body>
+</html>
