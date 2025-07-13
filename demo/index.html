@@ -5,15 +5,15 @@
 </head>
 <body>
   <h2>Network Monitor</h2>
-  <div id="aaa">Loading...</div>
+  <div id="test-id">Loading...</div>
 
   <script src="https://unpkg.com/network-monitor-js"></script>
 
   <script>
-    const monitor = new NetworkMonitor('test.html'); // should be defined now
+    const monitor = new NetworkMonitor('index.html');
 
     monitor.subscribe(status => {
-      document.getElementById('aaa').innerHTML = `
+      document.getElementById('test-id').innerHTML = `
         <p>✅ Online: ${status.online}</p>
         <p>⏱️ Latency: ${status.latency}ms</p>
         <p>📶 Type: ${status.effectiveType || 'unknown'}</p>

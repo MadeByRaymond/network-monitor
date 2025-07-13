@@ -5,6 +5,7 @@ export default defineConfig([
     entry: ['src/index.ts'],
     format: ['esm', 'cjs'],
     dts: true,
+    minify: true,
     outDir: 'dist',
     splitting: false,
     clean: true,
@@ -16,6 +17,6 @@ export default defineConfig([
     format: ['iife'],
     minify: true,
     outDir: 'dist',
-    clean: false, // keep other build outputs
+    clean: false,
   }
 ]);

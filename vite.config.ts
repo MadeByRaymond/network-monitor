@@ -10,9 +10,7 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        globals: {
-          // Add any external dependencies here if needed
-        }
+        globals: {}
       }
     }
   }
