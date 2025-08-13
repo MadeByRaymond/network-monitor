@@ -1,6 +1,6 @@
 {
   "name": "network-monitor-js",
-  "version": "1.1.5",
+  "version": "1.1.5", 
   "description": "A lightweight JS utility to monitor internet connectivity, online/offline, connection quality (2G/3G/4G/5G), ping latency and detect poor network conditions.",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
