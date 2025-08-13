@@ -13,10 +13,11 @@
 
 - ✅ Detects online/offline status
 - ⏱️ Measures latency via periodic ping
-- 📶 Tracks network type (e.g. `5g`, `4g`, `3g`, `slow-2g`)
+- 📶 Tracks network type (e.g. `4g`, `3g`, `2g`, `slow-2g`)
 - ⚠️ Flags poor network connections
 - 🔁 Emits changes when network status updates
-- 🪶 No dependencies, small footprint (~1KB gzipped)
+- 🔧 Fully configurable via `NetworkMonitorConfig`
+- 🪶 No dependencies, small footprint (~10KB gzipped)
 
 ---
 
@@ -38,12 +39,46 @@ npm install network-monitor-js
 
 ---
 
+## 🔧 Setup
+By default, the service pings `/ping.txt` every few seconds (depending on browser connection support). You can customize the ping URL to a different static file, endpoint or url:
+
+```ts
+import { NetworkMonitor } from 'network-monitor-js';
+
+const monitor = new NetworkMonitor({ 
+  // Optional configurations:
+  pingUrl: '/your-api/ping',
+  poorConnectionLatency: 1800, // ms
+  // ...other configuration settings
+});
+```
+
+### Additional Configurations:
+Additional configuration settings can be provided to customize how network connection is monitored:
+| Property                      | Description | Required? | Default |
+| ----------------------------- | ----------- | -------- | ------- |
+| pingUrl  | The URL to ping when checking connectivity. This should point to a small, cacheable file (e.g. a static file, endpoint or url) | optional | `/ping.txt` |
+| latencyThreshold  | The latency threshold (in milliseconds) above which the connection is considered "slow" | optional | `1800` ms |
+| slowConnectionTypes  | List of `effectiveType` values that should be treated as slow connections | optional | `['slow-2g', '2g', '3g']` |
+| pingIntervalMs  | Default ping interval (in milliseconds) when the browser supports [Network Information API](https://developer.mozilla.org/en-US/docs/Web/API/Network_Information_API) | optional | `60000` (60 seconds) |
+| fallbackPingIntervalMs  | Default ping interval (in milliseconds) when the browser does `NOT` support Network Information API. As a result, this should ping much more frequently than `pingIntervalMs`. <br/><br/> Many browsers E.g: Firefox, Safari, IE, etc and devices E.g: macOS, iOS, etc, will fallback to this as Network Information API is typically not supported on them | optional | `10000` (10 seconds) |
+
+
+### ✅ Requirements for Ping Endpoint
+Make sure your ping endpoint, url or file:
+- Returns a `200` or `204` response
+- Supports CORS (if it's on a different domain)
+- Responds quickly
+
+---
+
 ## 📚 Usage
 
 ```ts
 import { NetworkMonitor } from 'network-monitor-js';
 
-const monitor = new NetworkMonitor('/ping.txt');
+const monitor = new NetworkMonitor();
+
 monitor.subscribe(status => {
   console.log('Online:', status.online);
   console.log('Latency:', status.latency);
@@ -56,9 +91,8 @@ monitor.subscribe(status => {
 
 ## 🛠 API
 
-### `new NetworkMonitor(pingUrl?: string)`
-- `pingUrl`: (optional) URL to a lightweight file (default: `/ping.txt`). 
-- You can customize the ping URL to a different static file, endpoint or url
+### `new NetworkMonitor(config?: NetworkMonitorConfig)`
+- `config`: (optional) Configuration settings to customize how the service detects poor or slow networks
 
 ### `subscribe(callback: (status: NetworkStatus) => void)`
 - Subscribes to real-time status updates
@@ -78,7 +112,7 @@ Ensure this file exists in your app as a static file if using the default ping p
 ```
 If you prefer to ping a different static file / endpoint / url, you can change the default value as mentioned in the "📚 Usage" section:
 ```ts
-const monitor = new NetworkMonitor('/your-api/ping');
+const monitor = new NetworkMonitor({ pingUrl: '/your-api/ping' });
 ```
 
 ---

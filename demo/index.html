@@ -10,7 +10,9 @@
   <script src="https://unpkg.com/network-monitor-js"></script>
 
   <script>
-    const monitor = new NetworkMonitor('index.html');
+    const monitor = new NetworkMonitor({
+      pingUrl: 'index.html'
+    });
 
     monitor.subscribe(status => {
       document.getElementById('test-id').innerHTML = `
